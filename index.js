@@ -30,8 +30,6 @@ const menu = {
     quest6: 'Как устроен процесс покупки системы Термоэлектрик?',
 }
 
-const quest1Text = ''
-
 getInfoStage = -1
 ciStage = true
 pnKey = true
@@ -48,10 +46,6 @@ bot.onText(/\/start/, msg =>{
         }
     })
 })
-
-
-
-
 
 bot.on('message', msg =>{
 
@@ -207,7 +201,6 @@ Ingress Protection Rating (в переводе с английского язы�
         })
     }
 }
-
 
 function showQuestionMenu (msg) {
     bot.sendMessage(msg.chat.id, 'Выберите вопрос',{
