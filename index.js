@@ -1,5 +1,6 @@
 const TelegramBot = require('node-telegram-bot-api')
 const nodemailer = require('nodemailer');
+const fs = require('fs')
 const TOKEN ='485746843:AAGCaSU18nlCA8etTC23Vj-OaA_a4s9BJrc'
 
 const bot = new TelegramBot(TOKEN, {polling:true})
@@ -12,17 +13,36 @@ const bot = new TelegramBot(TOKEN, {polling:true})
 }
 const menu = {
     info: 'Информация',
-    callback: 'Подать заявку'
+    callback: 'Подать заявку',
+    kit: 'Маркетинг-кит',
+    compare: 'Сравнение с другими системами отопления',
+    questions: 'Частые вопросы',
+    mainMenu: 'В главное меню',
+    compare1: 'Теплый пол',
+    compare2: 'Газовое отопление',
+    compare3: 'Электрокотел',
+    compare4: 'Электроконвектор',
+    quest1: 'За счет чего экономия?',
+    quest2: 'Что если в моем городе нет дилера?',
+    quest3: 'Сложно ли установить систему?',
+    quest4: 'До скольки градусов нагревается радиатор?',
+    quest5: 'Безопасна ли наша система?',
+    quest6: 'Как устроен процесс покупки системы Термоэлектрик?',
 }
 
+const quest1Text = ''
 
 getInfoStage = -1
 ciStage = true
+pnKey = true
+cnKey = true
+const firstGreetings = `Приветствую!\nЧто вам нужно?`
+const chooseAction = `Выберите действие`
 
 bot.onText(/\/start/, msg =>{
-    const text = `Приветствую!\nЧто вам нужно?`
 
-    bot.sendMessage(msg.chat.id, text,{
+
+    bot.sendMessage(msg.chat.id, firstGreetings,{
         reply_markup:{
             keyboard: [[menu.info, menu.callback]]
         }
@@ -38,11 +58,57 @@ bot.on('message', msg =>{
     switch (msg.text) {
         case menu.info:
             ciStage = false
+            showInfoMenu(msg)
             break
         case menu.callback:
             ciStage = true
+            pnKey = true
+            cnKey = true
             bot.sendMessage(msg.chat.id, `Как к вам обращаться?`)
             getInfoStage = 0
+            break
+        case menu.kit:
+            giveKit(msg)
+            break
+        case menu.mainMenu:
+            showMainMenu(msg)
+            break
+        case menu.compare:
+            showCompareMenu(msg)
+            break
+        case menu.compare1:
+            showComparePhoto(msg,'1')
+            break
+        case menu.compare2:
+            showComparePhoto(msg,'2')
+            break
+        case menu.compare3:
+            showComparePhoto(msg,'3')
+            break
+        case menu.compare4:
+            showComparePhoto(msg,'4')
+            break
+        case menu.quest1:
+            showAnswer(msg, '1')
+            break
+        case menu.quest2:
+            showAnswer(msg, '2')
+            break
+        case menu.quest3:
+            showAnswer(msg, '3')
+            break
+        case menu.quest4:
+            showAnswer(msg, '4')
+            break
+        case menu.quest5:
+            showAnswer(msg, '5')
+            break
+        case menu.quest6:
+            showAnswer(msg, '6')
+            break
+
+        case menu.questions:
+            showQuestionMenu(msg)
             break
         default:
             getInfoStage++
@@ -76,13 +142,19 @@ bot.on('message', msg =>{
                     bot.answerCallbackQuery(query.id)
 
                     if(query.data === 'correctNumber') {
-                        bot.sendMessage(msg.chat.id, `В каком регионе вы находитесь, и какое время для звонка будем удобным для вас?`);
-                       getInfoStage = 2
+                        if(pnKey === true) {
+                            bot.sendMessage(msg.chat.id, `В каком регионе вы находитесь, и какое время для звонка будем удобным для вас?`);
+                            getInfoStage = 2
+                            pnKey = false
+                        }
 
                     }
-                    else {
-                        bot.sendMessage(msg.chat.id,'Введите номер:')
-                        getInfoStage = 1
+                    if(query.data === 'changeNumber') {
+                        if(cnKey === true) {
+                            bot.sendMessage(msg.chat.id, 'Введите номер:')
+                            getInfoStage = 1
+                            cnKey = false
+                        }
                     }
                 })
 
@@ -92,7 +164,9 @@ bot.on('message', msg =>{
             if(getInfoStage === 3) {
                 ci.callTime = msg.text
                 bot.sendMessage(msg.chat.id, `Наш специалист обязательно с вами свяжется`)
-                getInfoStage = -1
+                sendMail(ci)
+                getInfoStage = 100
+
             }
 
             break
@@ -101,9 +175,101 @@ bot.on('message', msg =>{
 
 })
 
+function showComparePhoto (msg, index) {
+    fs.readFile(`${__dirname}/img/compare${index}.jpg` , (error,img) => {
+        if (error) throw new Error(error)
+        bot.sendPhoto(msg.chat.id, img)
+    })
+
+}
+
+function showAnswer (msg, key) {
+    if(key === 1) {
+        bot.sendMessage(msg.chat_id, `Наша компания осуществляет доставку транспортными компаниями в любую точку России и СНГ.`)
+    }
+    if(key === 2) {
+        bot.sendMessage(msg.chat_id, `Наша компания осуществляет доставку транспортными компаниями в любую точку России и СНГ.`)
+    }
+    if(key === 3) {
+        bot.sendMessage(msg.chat_id, `Наша компания осуществляет доставку транспортными компаниями в любую точку России и СНГ.`)
+    }
+    if(key === 4) {
+        bot.sendMessage(msg.chat_id, `Наша компания осуществляет доставку транспортными компаниями в любую точку России и СНГ.`)
+    }
+    if(key === 5) {
+        bot.sendMessage(msg.chat_id, `Наша компания осуществляет доставку транспортными компаниями в любую точку России и СНГ.`)
+    }
+    if(key === 6) {
+        bot.sendMessage(msg.chat_id, `Наша компания осуществляет доставку транспортными компаниями в любую точку России и СНГ.`)
+    }
+}
 
 
+function showQuestionMenu (msg) {
+    bot.sendMessage(msg.chat.id, 'Выберите вопрос',{
+        reply_markup:{
+            keyboard: [
+                [menu.quest1,menu.quest2],
+                [menu.quest3,menu.quest4],
+                [menu.quest5,menu.quest6],
 
+
+                [menu.mainMenu]
+            ]
+        }
+    })
+}
+
+function showCompareMenu (msg) {
+    bot.sendMessage(msg.chat.id, 'Выберите тип отопления',{
+        reply_markup:{
+            keyboard: [
+                [menu.compare1, menu.compare2 , menu.compare3 , menu.compare4],
+                [menu.mainMenu]
+            ]
+        }
+    })
+}
+
+function showMainMenu(msg) {
+
+    bot.sendMessage(msg.chat.id, chooseAction,{
+        reply_markup:{
+            keyboard: [[menu.info, menu.callback]]
+        }
+    })
+
+}
+
+function showInfoMenu(msg) {
+
+    bot.sendMessage(msg.chat.id, chooseAction,{
+        reply_markup:{
+            keyboard: [
+                [menu.kit],
+                [menu.compare, menu.questions],
+                [menu.mainMenu]
+            ]
+}
+    })
+
+}
+
+function giveKit(msg) {
+    fs.readFile(`${__dirname}/files/TermoElectric_Kit.pdf` , (error,key) => {
+    if (error) throw new Error(error)
+
+    bot.sendMessage(msg.chat.id, 'Загружаю...')
+
+    bot.sendDocument(msg.chat.id, key, {
+        caption: 'Здесь есть  все, что вам нужно знать о нашей системе отопления'
+    },
+        {
+            filename: 'TermoElectric Kit'
+        })
+
+    })
+}
 
 function sendMail(content) {
     nodemailer.createTestAccount((err, account) => {
