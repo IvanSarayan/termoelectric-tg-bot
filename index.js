@@ -41,7 +41,7 @@ const chooseAction = `Выберите действие`
 
 bot.onText(/\/start/, msg =>{
 
-
+    getInfoStage = 100
     bot.sendMessage(msg.chat.id, firstGreetings,{
         reply_markup:{
             keyboard: [[menu.info, menu.callback]]
@@ -89,22 +89,22 @@ bot.on('message', msg =>{
             showComparePhoto(msg,'4')
             break
         case menu.quest1:
-            showAnswer(msg, '1')
+            showAnswer(msg, 1)
             break
         case menu.quest2:
-            showAnswer(msg, '2')
+            showAnswer(msg, 2)
             break
         case menu.quest3:
-            showAnswer(msg, '3')
+            showAnswer(msg, 3)
             break
         case menu.quest4:
-            showAnswer(msg, '4')
+            showAnswer(msg, 4)
             break
         case menu.quest5:
-            showAnswer(msg, '5')
+            showAnswer(msg, 5)
             break
         case menu.quest6:
-            showAnswer(msg, '6')
+            showAnswer(msg, 6)
             break
 
         case menu.questions:
@@ -185,22 +185,26 @@ function showComparePhoto (msg, index) {
 
 function showAnswer (msg, key) {
     if(key === 1) {
-        bot.sendMessage(msg.chat_id, `Наша компания осуществляет доставку транспортными компаниями в любую точку России и СНГ.`)
+        bot.sendMessage(msg.chat.id, `Наша компания осуществляет доставку транспортными компаниями в любую точку России и СНГ.`)
     }
     if(key === 2) {
-        bot.sendMessage(msg.chat_id, `Наша компания осуществляет доставку транспортными компаниями в любую точку России и СНГ.`)
+        bot.sendMessage(msg.chat.id, `Наша компания осуществляет доставку транспортными компаниями в любую точку России и СНГ.`)
     }
     if(key === 3) {
-        bot.sendMessage(msg.chat_id, `Наша компания осуществляет доставку транспортными компаниями в любую точку России и СНГ.`)
+        bot.sendMessage(msg.chat.id, `Установка системы TE требует только подвода электрического кабеля.\nДля установки газовой, либо электрокотла, требуется установить котлы, протянуть трубы к радиаторам и залить теплоноситель. У нас же достаточно протянуть кабель питания от вашего щита управления (счетчика).`)
     }
     if(key === 4) {
-        bot.sendMessage(msg.chat_id, `Наша компания осуществляет доставку транспортными компаниями в любую точку России и СНГ.`)
+        bot.sendMessage(msg.chat.id, `Максимальная температура нагрева внешней поверхности радиатора: +85С.`)
     }
     if(key === 5) {
-        bot.sendMessage(msg.chat_id, `Наша компания осуществляет доставку транспортными компаниями в любую точку России и СНГ.`)
+        bot.sendMessage(msg.chat.id, `Система прошла тестирование и полностью соответствует стандарту качества IP65 (Пылезащита и защитой от водяных струй с любого направления).
+Ingress Protection Rating (в переводе с английского языка — степень защиты от проникновения) — система классификации степеней защиты оболочки электрооборудования и других устройств от проникновения твёрдых предметов, пыли и воды в соответствии с международным стандартом IEC 60529 (DIN 40050, ГОСТ 14254-96). IP65 - Пылезащищённое c защитой от водяных струй с любого направления`)
     }
     if(key === 6) {
-        bot.sendMessage(msg.chat_id, `Наша компания осуществляет доставку транспортными компаниями в любую точку России и СНГ.`)
+        fs.readFile(`${__dirname}/img/paymentSystem.jpg` , (error,img) => {
+            if (error) throw new Error(error)
+            bot.sendPhoto(msg.chat.id, img)
+        })
     }
 }
 
