@@ -23,6 +23,11 @@ app.get('/', function(request, response) {
 });
 
 
+var http = require("http");
+setInterval(function() {
+    http.get("http://termoelectric.herokuapp.com");
+}, 300000);
+
 
  ci = {
     userName: '',
