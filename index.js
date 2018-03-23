@@ -5,13 +5,9 @@ const nodemailer = require('nodemailer');
 const fs = require('fs')
 const TOKEN ='485746843:AAGCaSU18nlCA8etTC23Vj-OaA_a4s9BJrc'
 
-const bot = new TelegramBot(TOKEN, {
-    webHook: {
-        port: 3000
-    }
-})
+const bot = new TelegramBot(TOKEN)
 
-bot.setWebHook(`https://termoelectric.ru/bot${TOKEN}`)
+
 
 
 
