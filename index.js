@@ -161,7 +161,7 @@ bot.on('message', msg =>{
 
                     if(query.data === 'correctNumber') {
                         if(pnKey === true) {
-                            bot.sendMessage(msg.chat.id, `В каком регионе вы находитесь, и какое время для звонка будем удобным для вас?`);
+                            bot.sendMessage(query.message.chat.id, `В каком регионе вы находитесь, и какое время для звонка будем удобным для вас?`);
                             getInfoStage = 2
                             pnKey = false
                         }
@@ -169,7 +169,7 @@ bot.on('message', msg =>{
                     }
                     if(query.data === 'changeNumber') {
                         if(cnKey === true) {
-                            bot.sendMessage(msg.chat.id, 'Введите номер:')
+                            bot.sendMessage(query.message.chat.id, 'Введите номер:')
                             getInfoStage = 1
                             cnKey = false
                         }
