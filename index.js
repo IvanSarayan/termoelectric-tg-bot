@@ -308,7 +308,7 @@ function sendMail(content) {
         // setup email data with unicode symbols
         let mailOptions = {
             from: 'reviewFromLanding@yandex.ru', // sender address
-            to: 'rst629@mail.ru', // list of receivers
+            to: 'sales@termoelectric.ru', // list of receivers
             subject: 'reviewFromTelegramBot', //c Subject line
             text: `Имя: ${content.userName}\nТелефон: ${content.phoneNumber}\nВремя и регион: ${content.callTime}` // plain text body
         };
